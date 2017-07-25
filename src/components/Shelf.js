@@ -4,12 +4,9 @@ import Bookgrid from './Bookgrid.js'
 const shelves = ["Currently Reading", "Want to Read", "Read"]
 
 class Shelf extends React.Component {
-  /**
-  read, wantToRead
-  */
+
   render () {
     const { onChangeView, page, userBooks} = this.props
-
     return (
       <div className="list-books">
         <div className="list-books-title">
@@ -18,12 +15,18 @@ class Shelf extends React.Component {
         <div className="list-books-content">
           <div>
           {shelves.map((categ) => {
-            <div className="bookshelf">
-              <h2 className="bookshelf-title">{categ}</h2>
-              <Bookgrid
-                bookList={userBooks}
-              />
-            </div>
+            return (
+              <div className="bookshelf">
+                <h2 className="bookshelf-title">{categ}</h2>
+                <div className="bookshelf-books">
+                  <Bookgrid
+                    key={categ}
+                    page={page}
+                    bookList={userBooks}
+                  />
+                </div>
+              </div>
+            )
           })}
         </div>
         </div>

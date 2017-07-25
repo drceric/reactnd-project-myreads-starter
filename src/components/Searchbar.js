@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import escapeRegExp from 'escape-string-regexp'
+/**import escapeRegExp from 'escape-string-regexp'**/
 import Bookgrid from './Bookgrid.js'
 
 class Searchbar extends Component {
@@ -20,14 +19,6 @@ class Searchbar extends Component {
     const { onChangeView, page, books } = this.props
     const { query } = this.state
 
-    let showResults
-    if (query) {
-      const match = new RegExp(escapeRegExp(query), 'i')
-      showResults = books.filter((book) => match.test(book.id))
-    } else {
-      showResults = books
-    }
-
     return (
       <div className="search-books">
         <div className="search-books-bar">
@@ -42,7 +33,10 @@ class Searchbar extends Component {
           </div>
         </div>
         <div className="search-books-results">
-          <Bookgrid />
+          <Bookgrid
+            page={page}
+            bookList={books}
+          />
         </div>
       </div>
     )

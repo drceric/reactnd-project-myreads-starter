@@ -32,22 +32,21 @@ class Book extends Component {
 
 class Bookgrid extends Component {
   render() {
-    const { bookList } = this.props
-    const a = [1,2]
+    const { page, bookList } = this.props
     return (
-      <div className="bookshelf-books">
-        <ol className="books-grid">
-          {a.map((book) => {
+      <ol className="books-grid">
+        {bookList.map((book) => {
+          return (
             <li>
               <Book
                 title={book.title}
                 author={book.author}
-                image=''
+                image={book.imageLinks}
               />
             </li>
-          })}
-        </ol>
-      </div>
+          )
+        })}
+      </ol>
     )
   }
 }
