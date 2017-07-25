@@ -1,28 +1,36 @@
 import React from 'react'
-import Book from './Book.js'
 import Bookgrid from './Bookgrid.js'
 
 const shelves = ["Currently Reading", "Want to Read", "Read"]
 
-let initInfo = {}
-initInfo["current"] = ["To Kill a Mockingbird", "Harper Lee"], ["Ender's Game", "Orson Scott Card"]
-initInfo["want"] = [["1776", "David McCullough"], ["Harry Potter and the Sorcerer's Stone", "J.K. Rowling"]]
-initInfo["read"] = [["The Hobbit", "J.R.R. Tolkien"], ["Oh, the Places You'll Go!", "Seuss"], ["The Adventures of Tom Sawyer", "Mark Twain"]]
-
 class Shelf extends React.Component {
-
+  /**
+  read, wantToRead
+  */
   render () {
+    const { onChangeView, page, userBooks} = this.props
+
     return (
-      <div>
-      {shelves.map((categ) => {
-        <div className="bookshelf">
-          <h2 className="bookshelf-title">{categ}</h2>
-          <div className="bookshelf-books">
-            <Bookgrid />
-          </div>
+      <div className="list-books">
+        <div className="list-books-title">
+          <h1>MyReads</h1>
         </div>
-      })}
-    </div>
+        <div className="list-books-content">
+          <div>
+          {shelves.map((categ) => {
+            <div className="bookshelf">
+              <h2 className="bookshelf-title">{categ}</h2>
+              <Bookgrid
+                bookList={userBooks}
+              />
+            </div>
+          })}
+        </div>
+        </div>
+        <div className="open-search">
+          <a onClick={() => onChangeView()}>Add a book</a>
+        </div>
+      </div>
     )
   }
 }

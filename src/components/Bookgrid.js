@@ -1,20 +1,53 @@
 import React, { Component }from 'react'
-import Book from './Book.js'
+
+function Bookchanger(props) {
+  return (
+    <div className="book-shelf-changer">
+      <select>
+        <option value="none" disabled>Move to...</option>
+        <option value="currentlyReading">Currently Reading</option>
+        <option value="wantToRead">Want to Read</option>
+        <option value="read">Read</option>
+        <option value="none">None</option>
+      </select>
+    </div>
+  )
+}
+
+class Book extends Component {
+  render() {
+    const { title, author, image } = this.props
+    return (
+      <div className="book">
+        <div className="book-top">
+          <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: {image} }}></div>
+          <Bookchanger />
+        </div>
+        <div className="book-title">{title}</div>
+        <div className="book-authors">{author}</div>
+      </div>
+    )
+  }
+}
 
 class Bookgrid extends Component {
-  state = {
-    books: [1, 2]
-  }
-
   render() {
+    const { bookList } = this.props
+    const a = [1,2]
     return (
-      <ol className="books-grid">
-        {this.state.books.map((book) => {
-          <li>
-            <Book />
-          </li>
-        })}
-      </ol>
+      <div className="bookshelf-books">
+        <ol className="books-grid">
+          {a.map((book) => {
+            <li>
+              <Book
+                title={book.title}
+                author={book.author}
+                image=''
+              />
+            </li>
+          })}
+        </ol>
+      </div>
     )
   }
 }
