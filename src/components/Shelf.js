@@ -5,8 +5,32 @@ const shelves = ["Currently Reading", "Want to Read", "Read"]
 
 class Shelf extends React.Component {
 
+  bookMatch = (bookList) => {
+    let bookDict = {
+      "Want to Read": [],
+      "Read": [],
+      "Currently Reading": []
+    }
+
+    bookList.map((book) => {
+      if (book.shelf === "wantToRead") {
+        bookDict["Want to Read"].push(book)
+      } else if (book.shelf === "read") {
+        bookDict["Read"].push(book)
+      } else {
+        bookDict["Currently Reading"].push(book)
+      }
+    }
+    )
+
+    return bookDict
+  }
+
   render () {
     const { onChangeView, page, userBooks} = this.props
+
+    let bookDict = this.bookMatch(userBooks)
+
     return (
       <div className="list-books">
         <div className="list-books-title">
@@ -22,7 +46,7 @@ class Shelf extends React.Component {
                   <Bookgrid
                     key={categ}
                     page={page}
-                    bookList={userBooks}
+                    bookList={bookDict[categ]}
                   />
                 </div>
               </div>
