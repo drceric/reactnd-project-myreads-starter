@@ -40,7 +40,7 @@ class Bookgrid extends Component {
             <li>
               <Book
                 title={book.title}
-                author={book.author}
+                author={book.authors[0]}
                 image={book.imageLinks}
               />
             </li>
