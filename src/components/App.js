@@ -14,14 +14,8 @@ class BooksApp extends React.Component {
      */
     showSearchPage: false,
     books: [],
-    userBooks: []
   }
 
-  componentDidMount() {
-    BooksAPI.getAll().then((books => {
-      this.setState({userBooks : books})
-    }))
-  }
 
   onClickChangeView = () => {
     this.setState({ showSearchPage: !this.state.showSearchPage })
@@ -35,13 +29,11 @@ class BooksApp extends React.Component {
           <Searchbar
             onChangeView={this.onClickChangeView}
             page={this.state.showSearchPage}
-            books={this.state.books}
           />
         ) : (
           <Shelf
             onChangeView={this.onClickChangeView}
             page={this.state.showSearchPage}
-            userBooks={this.state.userBooks}
           />
         )}
       </div>

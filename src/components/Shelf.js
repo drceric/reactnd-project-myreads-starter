@@ -1,36 +1,40 @@
 import React from 'react'
 import Bookgrid from './Bookgrid.js'
+import * as BooksAPI from '../utils/BooksAPI'
 
 const shelves = ["Currently Reading", "Want to Read", "Read"]
+const shelfToKey = {
+  "Currently Reading": "currentlyReading",
+  "Want to Read": 'wantToRead',
+  "Read": "read"
+}
 
 class Shelf extends React.Component {
+  state = {
+    read: [],
+    currentlyReading: [],
+    wantToRead: []
+  }
 
-  bookMatch = (bookList) => {
-    let bookDict = {
-      "Want to Read": [],
-      "Read": [],
-      "Currently Reading": []
-    }
+  componentDidMount() {
+    BooksAPI.getAll().then((books => {
+      let read = books.filter(book => book.shelf === 'read')
+      let current = books.filter(book => book.shelf === 'currentlyReading')
+      let want = books.filter(book => book.shelf === 'wantToRead')
+      this.setState({read : read, currentlyReading: current, wantToRead: want})
+    }))
+  }
 
-    bookList.map((book) => {
-      if (book.shelf === "wantToRead") {
-        bookDict["Want to Read"].push(book)
-      } else if (book.shelf === "read") {
-        bookDict["Read"].push(book)
-      } else {
-        bookDict["Currently Reading"].push(book)
-      }
-    }
-    )
-
-    return bookDict
+  onChangeShelf = (book, shelf) => {
+    this.setState((state) => {
+      state[book.shelf] = state[book.shelf].filter(b => b.id !== book.id)
+      state[shelf].push(book)
+    })
+    BooksAPI.update(book, shelf)
   }
 
   render () {
-    const { onChangeView, page, userBooks} = this.props
-
-    let bookDict = this.bookMatch(userBooks)
-
+    const { onChangeView, page } = this.props
     return (
       <div className="list-books">
         <div className="list-books-title">
@@ -45,8 +49,8 @@ class Shelf extends React.Component {
                 <div className="bookshelf-books">
                   <Bookgrid
                     key={categ}
-                    page={page}
-                    bookList={bookDict[categ]}
+                    bookList={this.state[shelfToKey[categ]]}
+                    onChangeShelf={this.onChangeShelf}
                   />
                 </div>
               </div>
