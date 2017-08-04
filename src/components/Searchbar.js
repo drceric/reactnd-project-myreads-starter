@@ -1,20 +1,31 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
 import * as BooksAPI from '../utils/BooksAPI'
 import Bookgrid from './Bookgrid.js'
 
 class Searchbar extends Component {
+  static propTypes = {
+    books: PropTypes.array.isRequired,
+    onChangeShelf: PropTypes.func.isRequired
+  }
+  
   state = {
     query: '',
     searchBooks: []
   }
 
   upadteQuery = (query) => {
-    this.setState({ query: query.trim() })
+    this.setState({ query: query })
   }
-
-  // BooksAPI's search function works strangely and the doc is not clear so
-  // I end up doing the own version of "sync"
+  /**
+    BooksAPI's search function works strangely and the doc is not clear so
+    I end up doing the own version of "sync", I believe if I use the API
+    update correctly, the search result should return me the correct  shelf info
+    hopefully the api can be updated
+    Also, this is a little bit coupled function because I try to avoid render
+    refresh so frequently and let the query input trigger the search
+  */
   onSearchBook = (query, myLibrary) => {
     this.upadteQuery(query)
     if (this.state.query !== '') {
@@ -23,12 +34,12 @@ class Searchbar extends Component {
           // if search return results
           for (let resultBook of books) {
             let exist = false
-            myLibrary.map((myBook) => {
+            for (let myBook of myLibrary) {
               if (myBook.id === resultBook.id) {
                 exist = true
                 resultBook.shelf = myBook.shelf
               }
-            })
+            }
             if (!exist) {
               resultBook.shelf = "none"
             }

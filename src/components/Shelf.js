@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import Bookgrid from './Bookgrid.js'
-import * as BooksAPI from '../utils/BooksAPI'
+import PropTypes from 'prop-types'
 
 const shelves = ["Currently Reading", "Want to Read", "Read"]
 const shelfToKey = {
@@ -11,6 +11,10 @@ const shelfToKey = {
 }
 
 class Shelf extends React.Component {
+  static propTypes = {
+    books: PropTypes.array.isRequired,
+    onChangeShelf: PropTypes.func.isRequired
+  }
 
   render () {
     const { books, onChangeShelf } = this.props

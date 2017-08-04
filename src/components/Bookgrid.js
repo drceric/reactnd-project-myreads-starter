@@ -1,6 +1,13 @@
 import React, { Component }from 'react'
+import PropTypes from 'prop-types'
 
 class Book extends Component {
+  static propTypes = {
+    book: PropTypes.object.isRequired,
+    shelf: PropTypes.string.isRequired,
+    onChangeShelf: PropTypes.func.isRequired
+  }
+
   render() {
     const { book, shelf, onChangeShelf } = this.props
     if (!book.hasOwnProperty("authors")) {
@@ -35,6 +42,10 @@ class Book extends Component {
 }
 
 class Bookgrid extends Component {
+  static propTypes = {
+    bookList: PropTypes.array.isRequired,
+    onChangeShelf: PropTypes.func.isRequired
+  }
   render() {
     const { bookList, onChangeShelf } = this.props
     return (
