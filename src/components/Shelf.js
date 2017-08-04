@@ -11,34 +11,9 @@ const shelfToKey = {
 }
 
 class Shelf extends React.Component {
-  state = {
-    read: [],
-    currentlyReading: [],
-    wantToRead: []
-  }
-
-  componentDidMount() {
-    BooksAPI.getAll().then((books => {
-      let read = books.filter(book => book.shelf === 'read')
-      let current = books.filter(book => book.shelf === 'currentlyReading')
-      let want = books.filter(book => book.shelf === 'wantToRead')
-      this.setState({read : read, currentlyReading: current, wantToRead: want})
-    }))
-  }
-
-  onChangeShelf = (book, shelf) => {
-    this.setState((prevState) => {
-      prevState[book.shelf] = prevState[book.shelf].filter(b => b.id !== book.id)
-      book.shelf = shelf
-      if (shelf !== 'none'){
-        prevState[shelf].push(book)
-      }
-      return prevState
-    })
-    BooksAPI.update(book, shelf)
-  }
 
   render () {
+    const { books, onChangeShelf } = this.props
     return (
       <div className="list-books">
         <div className="list-books-title">
@@ -53,8 +28,8 @@ class Shelf extends React.Component {
                 <h2 className="bookshelf-title">{categ}</h2>
                 <div className="bookshelf-books">
                   <Bookgrid
-                    bookList={this.state[shelfToKey[categ]]}
-                    onUpdateShelf={this.onChangeShelf}
+                    bookList={books.filter(b => b.shelf === shelfToKey[categ])}
+                    onChangeShelf={onChangeShelf}
                   />
                 </div>
               </div>

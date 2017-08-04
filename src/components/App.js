@@ -3,14 +3,42 @@ import { Route } from 'react-router-dom'
 import './App.css'
 import Searchbar from './Searchbar.js'
 import Shelf from './Shelf.js'
-
+import * as BooksAPI from '../utils/BooksAPI'
 class BooksApp extends React.Component {
+  state = {
+    books: []
+  }
+
+  componentDidMount() {
+    BooksAPI.getAll().then((books => {
+      this.setState({ books: books })
+    }))
+  }
+
+  onChangeShelf = (book, shelf) => {
+    book.shelf = shelf
+    BooksAPI.update(book, shelf).then(() => {
+      BooksAPI.getAll().then( books => {
+        this.setState({ books: books })
+      })
+    })
+  }
 
   render() {
     return (
       <div className="app">
-        <Route path="/main" component={Shelf}/>
-        <Route path="/search" component={Searchbar} />
+        <Route exact path="/" render={() => (
+          <Shelf
+            books={this.state.books}
+            onChangeShelf={this.onChangeShelf}
+          />
+        )}/>
+        <Route path="/search" render={() => (
+          <Searchbar
+            books={this.state.books}
+            onChangeShelf={this.onChangeShelf}
+          />
+        )}/>
       </div>
     )
   }
