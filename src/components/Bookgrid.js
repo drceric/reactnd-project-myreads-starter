@@ -1,17 +1,19 @@
 import React, { Component }from 'react'
 
 class Book extends Component {
-
   render() {
-    const { book, onChangeShelf } = this.props
+    const { book, shelf, onUpdateShelf } = this.props
+    if (!book.hasOwnProperty("authors")) {
+      book.authors = []
+    }
     return (
       <div className="book">
         <div className="book-top">
           <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.thumbnail})`}}></div>
           <div className="book-shelf-changer">
-            <select value={book.shelf}
-                    onChange={e => {onChangeShelf(book, e.target.value)}}>
-              <option value="none" disabled>Move to...</option>
+            <select value={shelf}
+                    onChange={e => {onUpdateShelf(book, e.target.value)}}>
+              <option value="move" disabled>Move to...</option>
               <option value="currentlyReading">Currently Reading</option>
               <option value="wantToRead">Want to Read</option>
               <option value="read">Read</option>
@@ -20,7 +22,13 @@ class Book extends Component {
           </div>
         </div>
         <div className="book-title">{book.title}</div>
-        <div className="book-authors">{book.authors[0]}</div>
+        {
+          book.authors.map((author) => {
+            return (
+              <div className="book-authors" key={author}>{author}</div>
+            )
+          })
+        }
       </div>
     )
   }
@@ -28,7 +36,7 @@ class Book extends Component {
 
 class Bookgrid extends Component {
   render() {
-    const { bookList, onChangeShelf } = this.props
+    const { bookList, onUpdateShelf } = this.props
     return (
       <ol className="books-grid">
         {bookList.map((book) => {
@@ -36,7 +44,8 @@ class Bookgrid extends Component {
             <li key={book.id}>
               <Book
                 book={book}
-                onChangeShelf={onChangeShelf}
+                shelf={book.shelf}
+                onUpdateShelf={onUpdateShelf}
               />
             </li>
           )

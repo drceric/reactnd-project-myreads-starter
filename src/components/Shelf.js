@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import Bookgrid from './Bookgrid.js'
 import * as BooksAPI from '../utils/BooksAPI'
 
@@ -26,15 +27,18 @@ class Shelf extends React.Component {
   }
 
   onChangeShelf = (book, shelf) => {
-    this.setState((state) => {
-      state[book.shelf] = state[book.shelf].filter(b => b.id !== book.id)
-      state[shelf].push(book)
+    this.setState((prevState) => {
+      prevState[book.shelf] = prevState[book.shelf].filter(b => b.id !== book.id)
+      book.shelf = shelf
+      if (shelf !== 'none'){
+        prevState[shelf].push(book)
+      }
+      return prevState
     })
     BooksAPI.update(book, shelf)
   }
 
   render () {
-    const { onChangeView, page } = this.props
     return (
       <div className="list-books">
         <div className="list-books-title">
@@ -44,13 +48,13 @@ class Shelf extends React.Component {
           <div>
           {shelves.map((categ) => {
             return (
-              <div className="bookshelf">
+              <div className="bookshelf"
+                    key={categ}>
                 <h2 className="bookshelf-title">{categ}</h2>
                 <div className="bookshelf-books">
                   <Bookgrid
-                    key={categ}
                     bookList={this.state[shelfToKey[categ]]}
-                    onChangeShelf={this.onChangeShelf}
+                    onUpdateShelf={this.onChangeShelf}
                   />
                 </div>
               </div>
@@ -59,7 +63,9 @@ class Shelf extends React.Component {
         </div>
         </div>
         <div className="open-search">
-          <a onClick={() => onChangeView()}>Add a book</a>
+          <Link
+            to="/search"
+          >Add a book</Link>
         </div>
       </div>
     )

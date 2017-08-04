@@ -1,41 +1,59 @@
 import React, { Component } from 'react'
-/**import escapeRegExp from 'escape-string-regexp'**/
+import { Link } from 'react-router-dom'
+import * as BooksAPI from '../utils/BooksAPI'
 import Bookgrid from './Bookgrid.js'
 
 class Searchbar extends Component {
   state = {
-    query: ''
+    query: '',
+    books: []
+  }
+  componentDidMount() {
+    BooksAPI.getAll().then((books => {
+      this.setState({ books: books })
+    }))
   }
 
-  updateQuery = (query) => {
-    this.setState({ query: query.trim() })
+  onAssignShelf = (book, shelf) => {
+    this.setState((state) => {
+      book.shelf = shelf
+    })
+    BooksAPI.update(book, shelf)
   }
 
-  clearQuery = () => {
-    this.setState({ query: '' })
+  onSearchBook = (query) => {
+    const maxResults = 20
+    this.setState({ query: query })
+    BooksAPI.search(query, maxResults).then((books) => {
+      if (!books || books.hasOwnProperty("error")) {
+        this.setState( { books: [] } )
+      } else {
+        this.setState( { books: books } )
+      }
+    })
   }
 
   render() {
-    const { onChangeView, page, books } = this.props
-    const { query } = this.state
-
     return (
       <div className="search-books">
         <div className="search-books-bar">
-          <a className="close-search" onClick={() => onChangeView()}>Close</a>
+          <Link
+            to="/main"
+            className="close-search"
+          >Close</Link>
           <div className="search-books-input-wrapper">
             <input
               type="text"
               placeholder="Search by title or author"
-              value={query}
-              onChange={(event) => this.updateQuery(event.target.value)}
+              value={this.state.query}
+              onChange={(e) => this.onSearchBook(e.target.value)}
             />
           </div>
         </div>
         <div className="search-books-results">
           <Bookgrid
-            page={page}
-            bookList={books}
+            bookList={this.state.books}
+            onUpdateShelf={this.onAssignShelf}
           />
         </div>
       </div>
