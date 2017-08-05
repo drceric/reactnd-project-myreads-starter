@@ -7,4 +7,5 @@ In the Terminal, follow the below instructions:
 1. `$ git clone https://github.com/drceric/reactnd-project-myreads-starter.git`
 2. `$ npm install`
 3. `$ npm start`
+
 The app should be launched in the `localhost:3000`.
