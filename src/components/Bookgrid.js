@@ -4,21 +4,22 @@ import PropTypes from 'prop-types'
 class Book extends Component {
   static propTypes = {
     book: PropTypes.object.isRequired,
-    shelf: PropTypes.string.isRequired,
     onChangeShelf: PropTypes.func.isRequired
   }
 
   render() {
-    const { book, shelf, onChangeShelf } = this.props
+    const { book, onChangeShelf } = this.props
     if (!book.hasOwnProperty("authors")) {
       book.authors = []
     }
+    console.log(book)
     return (
       <div className="book">
         <div className="book-top">
-          <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.thumbnail})` }}></div>
+          <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.thumbnail})` }}>
+          </div>
           <div className="book-shelf-changer">
-            <select value={shelf}
+            <select value={book.shelf}
                     onChange={e => {onChangeShelf(book, e.target.value)}}>
               <option value="move" disabled>Move to...</option>
               <option value="currentlyReading">Currently Reading</option>
@@ -28,7 +29,9 @@ class Book extends Component {
             </select>
           </div>
         </div>
-        <div className="book-title">{book.title}</div>
+        <div className="book-title">
+          <a href={book.previewLink} target="_blank" className="book-link">{book.title}</a>
+        </div>
         {
           book.authors.map((author) => {
             return (
@@ -52,10 +55,9 @@ class Bookgrid extends Component {
       <ol className="books-grid">
         {bookList.map((book) => {
           return (
-            <li key={book.shelf+book.id}>
+            <li key={book.id}>
               <Book
                 book={book}
-                shelf={book.shelf}
                 onChangeShelf={onChangeShelf}
               />
             </li>

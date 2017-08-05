@@ -4,12 +4,31 @@ import PropTypes from 'prop-types'
 import * as BooksAPI from '../utils/BooksAPI'
 import Bookgrid from './Bookgrid.js'
 
+/**
+This function is probably not necessary, if the API functions works as we expect
+*/
+const cleanResults = (books) => {
+  //Remove the books that does not have an image
+  books = books.filter(book => book.imageLinks && book.imageLinks.thumbnail)
+  //When search for keyword "React", console log has reported the same id, this
+  //basically try to avoid that
+  let checkDict = {}
+  let newBooks = []
+  for (let book of books) {
+    if (!checkDict[book.id]) {
+      newBooks.push(book)
+      checkDict[book.id] = true
+    }
+  }
+  return newBooks
+}
+
 class Searchbar extends Component {
   static propTypes = {
     books: PropTypes.array.isRequired,
     onChangeShelf: PropTypes.func.isRequired
   }
-  
+
   state = {
     query: '',
     searchBooks: []
@@ -44,15 +63,17 @@ class Searchbar extends Component {
               resultBook.shelf = "none"
             }
           }
-          // remove the non exist books and
+          // remove the non exist books and remove duplicated search results
           this.setState({
-            searchBooks: books.filter(book => book.imageLinks && book.imageLinks.thumbnail)
+            searchBooks: cleanResults(books)
           })
         } else {
           // either undefined or error message
           this.setState({ searchBooks: [] })
         }
       })
+    } else {
+      this.setState({ searchBooks: [] })
     }
   }
 

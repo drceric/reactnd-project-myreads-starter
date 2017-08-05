@@ -129,6 +129,13 @@ body, .app {
 .book-title {
   margin-top: 10px;
 }
+.book-link {
+  text-decoration: none;
+  color : #000;
+}
+a:hover {
+
+}
 .book-authors {
   color: #999;
 }
