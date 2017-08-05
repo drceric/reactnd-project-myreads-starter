@@ -33,7 +33,3 @@ TL;DR - Fork and clone your own version of this to use it.
 for you to use with your app.
 |-- package.json - npm package manager file. It's unlikely that you'll need to modify this.
 ```
-
-Remember that good React design practice is to create new JS files for each component and use import/require statements to include them where they are needed.
-
-## Demo
